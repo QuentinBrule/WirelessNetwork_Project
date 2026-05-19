@@ -161,10 +161,25 @@ def bin2dec(nb):
     return int(n, 2)
 
 d = {
-    "taille_cellules": bin2dec(bitDec[0:18]),
+    "ident_cellules": bin2dec(bitDec[0:18]),
     "nombre_utilisateurs": bin2dec(bitDec[18:24]),
 }
 
-print(d)
-
 size_PBCH = 24 + 24 * d['nombre_utilisateurs']
+
+def decode_PBCHU(bitDec):
+    out = []
+    for i in range(24, min(size_PBCH, len(bitDec)), 24):
+        block = bitDec[i:i+24]
+        if len(block) < 24:
+            break
+        out.append({
+            "User_ident": bin2dec(block[0:8]),
+            "MCS": bin2dec(block[8:10]),
+            "Symb_start": bin2dec(block[10:14]),
+            "RB_start": bin2dec(block[14:20]),
+            "HARQ": bin2dec(block[20:24])
+        })
+    return out
+
+print(decode_PBCHU(bitDec))
