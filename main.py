@@ -147,3 +147,24 @@ def test_hammingDecode():
 
 
 test_hammingDecode()
+
+# --- Calling Hamming decoding function
+bitDec = hamming748_decode(bitSeq)
+
+def bin2dec(nb):
+    """
+    Transform a binary list to an integer
+    """
+    n = "0b"
+    for b in nb:
+        n = n + str(b)
+    return int(n, 2)
+
+d = {
+    "taille_cellules": bin2dec(bitDec[0:18]),
+    "nombre_utilisateurs": bin2dec(bitDec[18:24]),
+}
+
+print(d)
+
+size_PBCH = 24 + 24 * d['nombre_utilisateurs']
