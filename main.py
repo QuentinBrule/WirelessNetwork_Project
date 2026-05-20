@@ -184,9 +184,7 @@ def decode_PBCHU(bitDec):
 
 print(decode_PBCHU(bitDec))
 
-
-import numpy as np
-
+# 2.3.1.2
 def qpsk_demod(symbols):
     bits = []
 
@@ -204,7 +202,7 @@ def qpsk_demod(symbols):
             bits.append(1)
 
     return bits
-
+#2.3.1.3
 def test_qpsk():
     # QPSK decoding test
     assert qpsk_demod(np.array([-0.7+1j*-0.7,0.7+1j*-0.7])) == [0, 0, 1, 0]
@@ -214,3 +212,13 @@ def test_qpsk():
     assert qpsk_demod(np.array([-0.9+1j*0.6,-0.5+1j*-0.7,0.7+1j*-0.6,0.7+1j*0.9,-0.8+1j*0.6,0.8+1j*0.7,-0.6+1j*0.6,0.7+1j*-0.7])) == [0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0]
 
 test_qpsk()
+#2.3.1.4
+def decode_pdcchu(pdcch_symbols, mcs_flag):
+    if mcs_flag == 0:
+        # BPSK
+        return bpsk_demod(pdcch_symbols)
+    elif mcs_flag == 2:
+        # QPSK
+        return qpsk_demod(pdcch_symbols)
+    else:
+        raise ValueError("MCS inconnu")
