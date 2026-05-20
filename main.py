@@ -183,3 +183,34 @@ def decode_PBCHU(bitDec):
     return out
 
 print(decode_PBCHU(bitDec))
+
+
+import numpy as np
+
+def qpsk_demod(symbols):
+    bits = []
+
+    for s in symbols:
+        # Bit sur partie réelle (I)
+        if np.real(s) < 0:
+            bits.append(0)
+        else:
+            bits.append(1)
+
+        # Bit sur partie imaginaire (Q)
+        if np.imag(s) < 0:
+            bits.append(0)
+        else:
+            bits.append(1)
+
+    return bits
+
+def test_qpsk():
+    # QPSK decoding test
+    assert qpsk_demod(np.array([-0.7+1j*-0.7,0.7+1j*-0.7])) == [0, 0, 1, 0]
+    assert qpsk_demod(np.array([-0.7+1j*0.7,0.7+1j*-0.7,0.7+1j*-0.7,0.7+1j*0.7])) == [0, 1, 1, 0, 1, 0, 1, 1]
+    assert qpsk_demod(np.array([-0.7+1j*0.7,0.7+1j*-0.7,0.7+1j*-0.7,-0.7+1j*-0.7,-0.7+1j*0.7,0.7+1j*-0.7,-0.7+1j*-0.7,-0.7+1j*0.7])) == [0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1]
+    assert qpsk_demod(np.array([-0.7+1j*0.7,-0.7+1j*-0.7,0.7+1j*-0.7,0.7+1j*0.7,-0.7+1j*0.7,0.7+1j*0.7,-0.7+1j*0.7,0.7+1j*-0.7])) == [0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0]
+    assert qpsk_demod(np.array([-0.9+1j*0.6,-0.5+1j*-0.7,0.7+1j*-0.6,0.7+1j*0.9,-0.8+1j*0.6,0.8+1j*0.7,-0.6+1j*0.6,0.7+1j*-0.7])) == [0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0]
+
+test_qpsk()
